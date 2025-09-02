@@ -66,7 +66,7 @@ export default function InputPage() {
       const response = await fetch('/api/gas', {
         method: 'POST',
         headers: {
-          'Content-Type': 'text/plain'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       })
