@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     const body = await req.text();
     const res = await fetch(GAS_URL as string, {
       method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      headers: { "Content-Type": "application/json" },
       body,
     });
     const txt = await res.text();
