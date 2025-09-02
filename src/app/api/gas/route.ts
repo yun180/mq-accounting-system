@@ -49,6 +49,7 @@ export async function POST(req: Request) {
     });
 
     const txt = await res.text();
+    console.log("GAS response text:", txt);
 
     return new Response(txt, {
       status: res.status,
