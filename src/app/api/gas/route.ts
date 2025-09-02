@@ -39,12 +39,13 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.text();
+    const data = await req.json();
+    console.log("proxy received data:", data);
 
     const res = await fetch(GAS_URL!, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body,
+      body: JSON.stringify(data),
     });
 
     const txt = await res.text();
