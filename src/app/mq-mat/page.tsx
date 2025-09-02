@@ -30,7 +30,8 @@ export default function MQMatPage() {
 
       const result = await response.json()
       
-      const formattedData = result.map((item: { month: string; monthlyMQ: number; mat12: number }) => ({
+      const dataArray = Array.isArray(result.data) ? result.data : []
+      const formattedData = dataArray.map((item: { month: string; monthlyMQ: number; mat12: number }) => ({
         month: item.month,
         monthlyMQ: Number(item.monthlyMQ) || 0,
         mat12: Number(item.mat12) || 0

@@ -73,7 +73,7 @@ export default function InputPage() {
 
       const result = await response.json()
 
-      if (result.success) {
+      if (result.ok) {
         setMessage('データが正常に保存されました')
         setData({
           date: new Date().toISOString().split('T')[0],

@@ -32,7 +32,8 @@ export default function MQGraphPage() {
 
       const result = await response.json()
       
-      const formattedData = result.map((item: { date: string; dailyMQ: number; cumMQ: number; F: number }) => ({
+      const dataArray = Array.isArray(result.data) ? result.data : []
+      const formattedData = dataArray.map((item: { date: string; dailyMQ: number; cumMQ: number; F: number }) => ({
         date: item.date,
         dailyMQ: Number(item.dailyMQ) || 0,
         cumMQ: Number(item.cumMQ) || 0,
