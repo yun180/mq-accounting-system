@@ -40,21 +40,30 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    console.log("proxy received data:", data);
+    console.log("=== VERCEL PROXY DEBUG ===");
+    console.log("proxy received data:", JSON.stringify(data, null, 2));
+    console.log("data type:", typeof data);
+    console.log("data keys:", Object.keys(data));
     console.log("sending to GAS with Content-Type: application/json");
     console.log("GAS_URL:", process.env.GAS_URL);
+    
+    const requestBody = JSON.stringify(data);
+    console.log("request body:", requestBody);
+    console.log("request body length:", requestBody.length);
 
     const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: requestBody,
     });
 
     const txt = await res.text();
     console.log("GAS response status:", res.status);
+    console.log("GAS response headers:", Object.fromEntries(res.headers.entries()));
     console.log("GAS response text:", txt);
+    console.log("=== END VERCEL PROXY DEBUG ===");
 
     return new Response(txt, {
       status: res.status,
