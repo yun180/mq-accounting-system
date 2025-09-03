@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain",
       },
       body: JSON.stringify(data),
     });
