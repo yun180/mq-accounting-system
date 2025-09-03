@@ -2,18 +2,11 @@ function doPost(e) {
   try {
     Logger.log("Raw e: " + JSON.stringify(e));
 
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Content-Type': 'application/json'
-    };
-
     if (!e || !e.postData || !e.postData.contents) {
+      Logger.log("No payload received");
       return ContentService
         .createTextOutput(JSON.stringify({ ok: false, error: "No payload" }))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeaders(headers);
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
     const parsed = JSON.parse(e.postData.contents);
@@ -39,17 +32,18 @@ function doPost(e) {
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true, message: "Data saved" }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders(headers);
+      .setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {
     Logger.log("Error: " + err);
     return ContentService
       .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
-      });
+      .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+function doOptions() {
+  return ContentService
+    .createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT);
 }
