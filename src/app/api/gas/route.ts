@@ -41,6 +41,8 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
     console.log("proxy received data:", data);
+    console.log("sending to GAS with Content-Type: application/json");
+    console.log("GAS_URL:", process.env.GAS_URL);
 
     const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
     });
 
     const txt = await res.text();
+    console.log("GAS response status:", res.status);
     console.log("GAS response text:", txt);
 
     return new Response(txt, {
