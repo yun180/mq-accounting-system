@@ -42,9 +42,11 @@ export async function POST(req: Request) {
     const data = await req.json();
     console.log("proxy received data:", data);
 
-    const res = await fetch(GAS_URL!, {
+    const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
 
@@ -54,15 +56,18 @@ export async function POST(req: Request) {
     return new Response(txt, {
       status: res.status,
       headers: {
+        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
       },
     });
-  } catch (error) {
-    console.error('POST request to GAS failed:', error);
-    return new Response(JSON.stringify({ ok: false, error: String(error) }), {
+  } catch (err) {
+    console.error("Proxy error:", err);
+    return new Response(JSON.stringify({ ok: false, error: String(err) }), {
       status: 500,
-      headers: { "Access-Control-Allow-Origin": "*" }
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
     });
   }
 }
