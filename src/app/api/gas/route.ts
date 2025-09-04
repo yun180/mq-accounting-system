@@ -40,21 +40,11 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    console.log("=== VERCEL PROXY DEBUG ===");
-    console.log("proxy received data:", JSON.stringify(data, null, 2));
-    console.log("data type:", typeof data);
-    console.log("data keys:", Object.keys(data));
-    console.log("sending to GAS with Content-Type: application/x-www-form-urlencoded");
-    console.log("GAS_URL:", process.env.GAS_URL);
-    console.log("Request method: POST");
-    console.log("Full request headers:", { "Content-Type": "application/x-www-form-urlencoded" });
     
     const requestBody = "data=" + encodeURIComponent(JSON.stringify(data));
     console.log("sending body:", requestBody);
-    console.log("request body (form-encoded):", requestBody);
-    console.log("request body length:", requestBody.length);
-    console.log("request body type:", typeof requestBody);
-    console.log("request body first 100 chars:", requestBody.substring(0, 100));
+    console.log("body length:", requestBody.length);
+    console.log("GAS_URL:", process.env.GAS_URL);
 
     const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
@@ -64,25 +54,11 @@ export async function POST(req: Request) {
       body: requestBody,
     });
 
-    const txt = await res.text();
-    console.log("GAS response status:", res.status);
-    console.log("GAS response text:", txt);
-    console.log("GAS response headers:", Object.fromEntries(res.headers.entries()));
-    console.log("GAS response text length:", txt.length);
-    console.log("GAS response text first 200 chars:", txt.substring(0, 200));
-    
-    let parsedResponse;
-    try {
-      parsedResponse = JSON.parse(txt);
-      console.log("GAS response parsed successfully:", parsedResponse);
-    } catch (parseErr) {
-      console.log("GAS response is not valid JSON:", parseErr);
-      console.log("Raw response text:", txt);
-    }
-    
-    console.log("=== END VERCEL PROXY DEBUG ===");
+    const text = await res.text();
+    console.log("response status:", res.status);
+    console.log("response text:", text);
 
-    return new Response(txt, {
+    return new Response(text, {
       status: res.status,
       headers: {
         "Content-Type": "application/json",
