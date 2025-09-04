@@ -44,25 +44,42 @@ export async function POST(req: Request) {
     console.log("proxy received data:", JSON.stringify(data, null, 2));
     console.log("data type:", typeof data);
     console.log("data keys:", Object.keys(data));
-    console.log("sending to GAS with Content-Type: application/json");
+    console.log("sending to GAS with Content-Type: application/x-www-form-urlencoded");
     console.log("GAS_URL:", process.env.GAS_URL);
+    console.log("Request method: POST");
+    console.log("Full request headers:", { "Content-Type": "application/x-www-form-urlencoded" });
     
-    const requestBody = JSON.stringify(data);
-    console.log("request body:", requestBody);
+    const requestBody = "data=" + encodeURIComponent(JSON.stringify(data));
+    console.log("sending body:", requestBody);
+    console.log("request body (form-encoded):", requestBody);
     console.log("request body length:", requestBody.length);
+    console.log("request body type:", typeof requestBody);
+    console.log("request body first 100 chars:", requestBody.substring(0, 100));
 
     const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: requestBody,
     });
 
     const txt = await res.text();
     console.log("GAS response status:", res.status);
-    console.log("GAS response headers:", Object.fromEntries(res.headers.entries()));
     console.log("GAS response text:", txt);
+    console.log("GAS response headers:", Object.fromEntries(res.headers.entries()));
+    console.log("GAS response text length:", txt.length);
+    console.log("GAS response text first 200 chars:", txt.substring(0, 200));
+    
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(txt);
+      console.log("GAS response parsed successfully:", parsedResponse);
+    } catch (parseErr) {
+      console.log("GAS response is not valid JSON:", parseErr);
+      console.log("Raw response text:", txt);
+    }
+    
     console.log("=== END VERCEL PROXY DEBUG ===");
 
     return new Response(txt, {
