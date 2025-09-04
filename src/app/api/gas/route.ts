@@ -54,11 +54,13 @@ export async function POST(req: Request) {
       method: "POST",
       headers: headers,
       body: formData,
+      redirect: "follow",
     });
 
     const text = await res.text();
     console.log("📥 GAS response status:", res.status);
     console.log("📥 GAS response text:", text);
+    console.log("📥 Final URL after redirects:", res.url);
 
     return new Response(text, {
       status: res.status,
