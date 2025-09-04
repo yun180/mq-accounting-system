@@ -40,21 +40,25 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const formData = await req.text();
-    console.log("sending body:", formData);
-    console.log("body length:", formData.length);
-    console.log("GAS_URL:", process.env.GAS_URL);
+    console.log("=== VERCEL PROXY DEBUG ===");
+    console.log("📤 Final body string:", formData);
+    console.log("📏 Body length:", formData.length);
+    console.log("🎯 GAS_URL:", process.env.GAS_URL);
+    
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    console.log("📋 Request headers:", headers);
 
     const res = await fetch(process.env.GAS_URL!, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+      headers: headers,
       body: formData,
     });
 
     const text = await res.text();
-    console.log("response status:", res.status);
-    console.log("response text:", text);
+    console.log("📥 GAS response status:", res.status);
+    console.log("📥 GAS response text:", text);
 
     return new Response(text, {
       status: res.status,
@@ -65,7 +69,7 @@ export async function POST(req: Request) {
     });
 
   } catch (err) {
-    console.error("Proxy error:", err);
+    console.error("🔥 Proxy error:", err);
     return new Response(JSON.stringify({ ok: false, error: String(err) }), {
       status: 500,
       headers: {
