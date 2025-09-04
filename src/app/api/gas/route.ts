@@ -63,6 +63,7 @@ export async function POST(req: Request) {
         "Access-Control-Allow-Origin": "*",
       },
     });
+
   } catch (err) {
     console.error("Proxy error:", err);
     return new Response(JSON.stringify({ ok: false, error: String(err) }), {
