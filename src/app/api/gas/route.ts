@@ -39,11 +39,9 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
-    
-    const requestBody = "data=" + encodeURIComponent(JSON.stringify(data));
-    console.log("sending body:", requestBody);
-    console.log("body length:", requestBody.length);
+    const formData = await req.text();
+    console.log("sending body:", formData);
+    console.log("body length:", formData.length);
     console.log("GAS_URL:", process.env.GAS_URL);
 
     const res = await fetch(process.env.GAS_URL!, {
@@ -51,7 +49,7 @@ export async function POST(req: Request) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: requestBody,
+      body: formData,
     });
 
     const text = await res.text();

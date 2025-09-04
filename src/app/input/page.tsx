@@ -66,9 +66,9 @@ export default function InputPage() {
       const response = await fetch('/api/gas', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify(payload)
+        body: "data=" + encodeURIComponent(JSON.stringify(payload))
       })
 
       const result = await response.json()
